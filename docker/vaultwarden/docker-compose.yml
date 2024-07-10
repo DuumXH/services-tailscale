@@ -1,0 +1,40 @@
+services:
+  vaultwarden:
+    image: vaultwarden/server:latest
+    container_name: vaultwarden
+    depends_on: postgres
+    restart: unless-stopped
+    network_mode: service:tailscale
+    environment: 
+      DOMAIN: "https://HOSTNAME_IN_TAILNET.tailnet.ts.net"
+      DATABASE_URL: "postgresql://vaultwarden:[PASSWORD_GOES_HERE]@localhost:5432/vaultwarden"
+    volumes:
+      - ./vaultwarden:/data:Z
+  postgres:
+    image: postgres:16-alpine
+    container_name: vaultwarden-db
+    depends_on: tailscale
+    restart: unless-stopped
+    network_mode: service:tailscale
+    environment:
+      POSTGRES_USER: "vaultwarden"
+      POSTGRES_DB: "vaultwarden"
+      POSTGRES_PASSWORD: "PASSWORD_GOES_HERE"
+    volumes:
+      - ./vaultwarden-db:/var/lib/postgresql/data:Z
+  tailscale:
+    image:
+      image: tailscale/tailscale:latest
+      container_name: vaultwarden-ts
+      restart: unless-stopped
+    environment:
+      TS_AUTHKEY: "YOUR_AUTH_KEY"
+      TS_STATE_DIR: "/var/lib/tailscale"
+      TS_HOSTNAME: "HOSTNAME_IN_TAILNET"
+      TS_USERSPACE: false
+    cap_add:
+      - net_admin
+      - sys_module
+    volumes:
+      - ./vaultwarden-ts:/var/lib/tailscale:Z
+      - /dev/net/tun:/dev/net/tun
