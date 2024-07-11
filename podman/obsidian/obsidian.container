@@ -1,0 +1,16 @@
+[Unit]
+Description=Obsidian container
+After=network-online.target
+
+[Container]
+Image=docker.io/library/couchdb:latest
+Pod=obsidian.pod
+ContainerName=obsidian
+Volume=obsidian:/opt/couchdb/data:Z
+Volume=./local.ini:/opt/couchdb/etc/local.ini:Z
+
+[Service]
+Restart=always
+
+[Install]
+WantedBy=multi-user.target
