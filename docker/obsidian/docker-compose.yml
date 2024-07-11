@@ -1,0 +1,29 @@
+services:
+  couchdb:
+    image: couchdb:latest
+    container_name: obsidian
+    depends_on: tailscale
+    environment:
+      - COUCHDB_USER=username
+      - COUCHDB_PASSWORD=password
+    volumes:
+      - ./obsidian:/opt/couchdb/data
+      - ./local.ini:/opt/couchdb/etc/local.ini
+    restart: unless-stopped
+    network_mode: service:tailscale
+  tailscale:
+    image:
+      image: tailscale/tailscale:latest
+      container_name: obsidian-ts
+      restart: unless-stopped
+    environment:
+      TS_AUTHKEY: "YOUR_AUTH_KEY"
+      TS_STATE_DIR: "/var/lib/tailscale"
+      TS_HOSTNAME: "HOSTNAME_IN_TAILNET"
+      TS_USERSPACE: false
+    cap_add:
+      - net_admin
+      - sys_module
+    volumes:
+      - ./vaultwarden-ts:/var/lib/tailscale:Z
+      - /dev/net/tun:/dev/net/tun
