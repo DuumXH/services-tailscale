@@ -1,0 +1,15 @@
+[Unit]
+Description=Vaultwarden container
+After=network-online.target
+
+[Container]
+Image=ghcr.io/dani-garcia/vaultwarden:latest
+Pod=vaultwarden.pod
+ContainerName=vaultwarden
+Environment=DOMAIN=https://HOSTNAME_IN_TAILNET.tailnet.ts.net
+Secret=vw_database_url,type=env,target=DATABASE_URL
+Exec=/start.sh
+Volume=vaultwarden:/data/:Z
+
+[Install]
+WantedBy=default.target

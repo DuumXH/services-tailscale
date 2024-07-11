@@ -1,0 +1,3 @@
+[Pod]
+Network=vaultwarden.network
+PodName=vaultwarden

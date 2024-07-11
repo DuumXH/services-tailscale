@@ -1,0 +1,18 @@
+[Unit]
+Description=Vaultwarden postgres container
+After=network-online.target
+
+[Container]
+Image=docker.io/library/postgres:16-alpine
+ContainerName=vaultwarden-db
+Pod=vaultwarden.pod
+Secret=vw_postgres_user,type=env,target=POSTGRES_USER
+Secret=vw_postgres_password,type=env,target=POSTGRES_PASSWORD
+Secret=vw_postgres_db,type=env,target=POSTGRES_DB
+Volume=vaultwarden-db:/var/lib/postgresql/data:Z
+
+[Service]
+Restart=always
+
+[Install]
+WantedBy=multi-user.target
