@@ -1,0 +1,18 @@
+[Unit]
+Description=Navidrome syncthing container
+After=network-online.target
+
+[Container]
+Image=lscr.io/linuxserver/syncthing:latest
+ContainerName=navidrome-syncthing
+Pod=navidrome.pod
+Environment=PUID=1000
+Environment=GUID=1000
+Volume=navidrome-syncthing:/config:Z
+Volume=/path/to/music:/MusicLibrary:z
+
+[Service]
+Restart=always
+
+[Install]
+WantedBy=multi-user.target

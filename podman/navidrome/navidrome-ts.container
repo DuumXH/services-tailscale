@@ -1,0 +1,21 @@
+[Unit]
+Description=Navidrome tailscale container
+After=network-online.target
+
+[Container]
+Image=docker.io/tailscale/tailscale:latest
+ContainerName=navidrome-tailscale
+Pod=navidrome.pod
+AddDevice=/dev/net/tun
+AddCapability=net_admin
+AddCapability=net_raw
+Environment=TS_HOSTNAME=HOSTNAME_IN_TAILNET
+Environment=TS_STATE_DIR=/var/lib/tailscale
+Secret=ts_authkey,type=env,target=TS_AUTHKEY
+Volume=navidrome-tailscale:/var/lib/tailscale:Z
+
+[Service]
+Restart=always
+
+[Install]
+WantedBy=multi-user.target

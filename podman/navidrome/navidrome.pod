@@ -1,0 +1,3 @@
+[Pod]
+Network=navidrome.network
+PodName=navidrome

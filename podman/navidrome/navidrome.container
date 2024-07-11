@@ -1,0 +1,18 @@
+[Unit]
+Description=Navidrome container
+After=network-online.target
+
+[Container]
+Image=docker.io/deluan/navidrome:latest
+ContainerName=navidrome
+Pod=navidrome.pod
+User=1000
+Group=1000
+Volume=navidrome:/data:Z
+Volume=/path/to/music:/music:z
+
+[Service]
+Restart=always
+
+[Install]
+WantedBy=default.target
